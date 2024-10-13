@@ -1,0 +1,22 @@
+package tea_impl
+
+import (
+	"bytes"
+	"testing"
+)
+
+func TestTcTea_CbcDecrypt(t *testing.T) {
+	tea := TcTea{keys: [4]uint32{0x31323334, 0x35363738, 0x41424344, 0x45464748}}
+	data := []byte{
+		0x91, 0x09, 0x51, 0x62, 0xe3, 0xf5, 0xb6, 0xdc, //
+		0x6b, 0x41, 0x4b, 0x50, 0xd1, 0xa5, 0xb8, 0x4e, //
+		0xc5, 0x0d, 0x0c, 0x1b, 0x11, 0x96, 0xfd, 0x3c, //
+	}
+	decrypted, err := tea.CbcDecrypt(data)
+	if err != nil {
+		t.Error(err)
+	}
+	if !bytes.Equal(decrypted, []byte{1, 2, 3, 4, 5, 6, 7, 8}) {
+		t.Error("decrypted error")
+	}
+}
